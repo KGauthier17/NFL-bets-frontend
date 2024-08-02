@@ -1,0 +1,23 @@
+.bet-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 200px;
+    text-align: left;
+  }
+  
+  .player-image {
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  .bet-card h2 {
+    font-size: 1.5em;
+    margin: 10px 0;
+  }
+  
+  .bet-card p {
+    margin: 5px 0;
+  }
+  

@@ -1,0 +1,23 @@
+.bet-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
+  gap: 20px;
+}
+
+.prop-selector {
+  margin: 20px;
+  text-align: center;
+}
+
+.prop-selector label {
+  margin-right: 10px;
+  font-size: 1.2em;
+}
+
+.prop-selector select {
+  padding: 5px 10px;
+  font-size: 1em;
+}
+  

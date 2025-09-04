@@ -221,21 +221,16 @@
   backface-visibility: hidden;
 }
 
-/* Mobile-specific fix for backface visibility */
+/* Remove the duplicate mobile media query and replace with this single one */
 @media (max-width: 768px) {
-  .player-card.flipped .card-front,
-  .player-card.flipped .card-front *,
-  .player-card.flipped .player-avatar,
-  .player-card.flipped .avatar-pattern-1,
-  .player-card.flipped .avatar-pattern-2,
-  .player-card.flipped .avatar-initials {
-    opacity: 0;
-    visibility: hidden;
+  /* Force hide front face elements when flipped */
+  .player-card.flipped .card-front {
+    transform: rotateY(180deg);
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none;
   }
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
+  
   .player-card {
     width: 250px;
     height: 350px;

@@ -1,9 +1,10 @@
 .App-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #013369 0%, #1B4F72 50%, #2C3E50 100%);
   padding: 30px 20px;
   color: white;
   text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(1, 51, 105, 0.3);
+  border-bottom: 4px solid #FFD700;
 }
 
 .header-content h1 {

@@ -18,13 +18,14 @@
 }
 
 .grid-header p {
-  color: #666;
+  color: #2C3E50;
   font-size: 1.1em;
   margin-bottom: 15px;
+  font-weight: 600;
 }
 
 .refresh-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
   color: white;
   border: none;
   padding: 12px 24px;
@@ -33,12 +34,14 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(44, 62, 80, 0.3);
+  border: 2px solid #FFD700;
 }
 
 .refresh-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(44, 62, 80, 0.4);
+  background: linear-gradient(135deg, #34495E 0%, #5D6D7E 100%);
 }
 
 .refresh-button:active {
@@ -60,7 +63,8 @@
   padding: 20px;
   background: #f8f9fa;
   border-radius: 10px;
-  color: #666;
+  color: #2C3E50;
+  border: 2px solid #E8F0F3;
 }
 
 .grid-footer > p {
@@ -106,7 +110,7 @@
   width: 50px;
   height: 50px;
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #667eea;
+  border-top: 4px solid #2C3E50;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 20px;

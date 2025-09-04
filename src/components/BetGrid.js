@@ -63,6 +63,10 @@ const BetGrid = () => {
       
       // Extract the Probabilities object from the response
       if (data && data.Probabilities) {
+        // Check if Probabilities object is empty
+        if (Object.keys(data.Probabilities).length === 0) {
+          throw new Error('No player data available at this time. Please try again later.');
+        }
         setPlayerData(data.Probabilities);
       } else {
         throw new Error('Invalid data format: Probabilities not found in response');

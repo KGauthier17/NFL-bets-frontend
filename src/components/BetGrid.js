@@ -107,28 +107,8 @@ const BetGrid = () => {
     );
   }
 
-  // Normalize player names and deduplicate (handle typos like "geroge" vs "george")
-  const normalizePlayerName = (name) => {
-    return name.toLowerCase()
-      .replace('geroge', 'george') // Fix common typo
-      .replace('isiah', 'isaiah') // Fix common typo
-      .trim();
-  };
-
-  // Deduplicate players based on normalized names
-  const deduplicatedPlayers = {};
-  Object.entries(playerData).forEach(([playerName, props]) => {
-    const normalizedName = normalizePlayerName(playerName);
-    
-    // If we haven't seen this normalized name before, or if the current name is "better" (no typo)
-    if (!deduplicatedPlayers[normalizedName] || 
-        (playerName.toLowerCase().includes('george') && !deduplicatedPlayers[normalizedName][0].toLowerCase().includes('george'))) {
-      deduplicatedPlayers[normalizedName] = [playerName, props];
-    }
-  });
-  
   // Sort players alphabetically by name
-  const sortedPlayers = Object.values(deduplicatedPlayers).sort(([nameA], [nameB]) => 
+  const sortedPlayers = Object.entries(playerData).sort(([nameA], [nameB]) => 
     nameA.localeCompare(nameB)
   );
 

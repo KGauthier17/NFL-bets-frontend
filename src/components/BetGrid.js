@@ -7,7 +7,7 @@ const BetGrid = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const BASE_URL = 'https://nfl-bets-backend.onrender.com';
+  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
   const fetchWithTimeout = (url, options = {}, timeout = 30000) => {
     return Promise.race([
@@ -26,7 +26,7 @@ const BetGrid = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-      }, 60000); // 15 second timeout for health check
+      }, 60000); // 60 second timeout for health check
       
       if (!healthResponse.ok) {
         console.warn('Health check failed, but continuing with main request');
@@ -36,7 +36,7 @@ const BetGrid = () => {
     } catch (error) {
       console.warn('Health check failed:', error.message, '- continuing with main request');
     }
-  }, []);
+  }, [BASE_URL]); // Added BASE_URL to dependency array
 
   const fetchPlayerData = useCallback(async () => {
     try {
@@ -82,7 +82,7 @@ const BetGrid = () => {
     } finally {
       setLoading(false);
     }
-  }, [wakeUpBackend]);
+  }, [wakeUpBackend, BASE_URL]); // Added BASE_URL to dependency array
 
   useEffect(() => {
     fetchPlayerData();

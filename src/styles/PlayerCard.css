@@ -44,6 +44,7 @@
   align-items: center;
   padding: 20px;
   border: 3px solid #FFD700;
+  backface-visibility: hidden;
 }
 
 .card-back {
@@ -53,6 +54,12 @@
   padding: 20px;
   border: 3px solid #A8B4C0;
   overflow-y: auto;
+  backface-visibility: hidden;
+}
+
+/* Ensure all child elements of card-front respect backface visibility */
+.card-front * {
+  backface-visibility: hidden;
 }
 
 .player-image-container {
@@ -61,6 +68,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  backface-visibility: hidden;
 }
 
 .player-image {
@@ -164,6 +172,66 @@
 
 .props-container::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.5);
+}
+
+/* Avatar styles */
+.player-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  font-size: 3rem;
+  font-weight: bold;
+  border: 4px solid #FFD700;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+
+.avatar-pattern-1 {
+  position: absolute;
+  top: -20%;
+  right: -20%;
+  width: 60%;
+  height: 60%;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  z-index: 1;
+  backface-visibility: hidden;
+}
+
+.avatar-pattern-2 {
+  position: absolute;
+  bottom: -30%;
+  left: -30%;
+  width: 80%;
+  height: 80%;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  z-index: 1;
+  backface-visibility: hidden;
+}
+
+.avatar-initials {
+  position: relative;
+  z-index: 2;
+  backface-visibility: hidden;
+}
+
+/* Mobile-specific fix for backface visibility */
+@media (max-width: 768px) {
+  .player-card.flipped .card-front,
+  .player-card.flipped .card-front *,
+  .player-card.flipped .player-avatar,
+  .player-card.flipped .avatar-pattern-1,
+  .player-card.flipped .avatar-pattern-2,
+  .player-card.flipped .avatar-initials {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
 /* Responsive design */

@@ -139,50 +139,16 @@ const PlayerCard = ({ playerName, playerData }) => {
         <div className="card-front">
           <div className="player-image-container">
             <div 
-              className="player-avatar"
+              className={`player-avatar player-avatar-${avatar.initials.toLowerCase()}`}
               style={{
                 backgroundColor: avatar.backgroundColor,
-                color: avatar.textColor,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '150px',
-                height: '150px',
-                borderRadius: '50%',
-                fontSize: '3rem',
-                fontWeight: 'bold',
-                border: '4px solid #FFD700',
-                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.3)',
-                position: 'relative',
-                overflow: 'hidden'
+                color: avatar.textColor
               }}
             >
               {/* Background pattern for visual interest */}
-              <div 
-                style={{
-                  position: 'absolute',
-                  top: '-20%',
-                  right: '-20%',
-                  width: '60%',
-                  height: '60%',
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  borderRadius: '50%',
-                  zIndex: 1
-                }}
-              />
-              <div 
-                style={{
-                  position: 'absolute',
-                  bottom: '-30%',
-                  left: '-30%',
-                  width: '80%',
-                  height: '80%',
-                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                  borderRadius: '50%',
-                  zIndex: 1
-                }}
-              />
-              <span style={{ position: 'relative', zIndex: 2 }}>
+              <div className="avatar-pattern-1" />
+              <div className="avatar-pattern-2" />
+              <span className="avatar-initials">
                 {avatar.initials}
               </span>
             </div>

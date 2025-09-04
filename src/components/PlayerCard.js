@@ -73,6 +73,7 @@ const PlayerCard = ({ playerName, playerData }) => {
       'carries': 'Carries',
       
       // Combined props
+      'rush reception yd': 'Rush + Rec Yards',
       'rush reception yds': 'Rush + Rec Yards'
     };
 
@@ -102,13 +103,17 @@ const PlayerCard = ({ playerName, playerData }) => {
       touchdowns: [],
       receiving: [],
       rushing: [],
-      passing: []
+      passing: [],
+      combined: []
     };
 
     Object.entries(data).forEach(([key, value]) => {
       const lowerKey = key.toLowerCase();
       
-      if (lowerKey.includes('td')) {
+      // Handle combined props first (before individual categories)
+      if (lowerKey.includes('rush') && lowerKey.includes('reception')) {
+        groups.combined.push({ key, value });
+      } else if (lowerKey.includes('td')) {
         groups.touchdowns.push({ key, value });
       } else if (lowerKey.includes('reception')) {
         groups.receiving.push({ key, value });
@@ -171,9 +176,18 @@ const PlayerCard = ({ playerName, playerData }) => {
               const props = propGroups[groupName];
               if (props.length === 0) return null;
 
+              // Map group names to display names
+              const groupDisplayNames = {
+                touchdowns: 'TOUCHDOWNS',
+                receiving: 'RECEIVING',
+                rushing: 'RUSHING', 
+                passing: 'PASSING',
+                combined: 'RUSH + RECEIVING'
+              };
+
               return (
                 <div key={groupName} className="prop-group">
-                  <h4 className="prop-group-title">{groupName.toUpperCase()}</h4>
+                  <h4 className="prop-group-title">{groupDisplayNames[groupName] || groupName.toUpperCase()}</h4>
                   {props.map(({ key, value }) => {
                     const percentage = (value * 100).toFixed(1);
                     const lineValue = extractLineValue(key);

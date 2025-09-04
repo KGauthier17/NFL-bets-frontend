@@ -1,59 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../styles/PlayerCard.css';
 
 const PlayerCard = ({ playerName, playerData }) => {
   const [isFlipped, setIsFlipped] = useState(false);
-  const [imageUrlIndex, setImageUrlIndex] = useState(0);
-
-  // Reset image URL index when player name changes
-  useEffect(() => {
-    setImageUrlIndex(0);
-  }, [playerName]);
 
   const handleCardClick = () => {
     setIsFlipped(!isFlipped);
   };
 
-  const handleImageError = () => {
-    const imageUrls = getPlayerImageUrls(playerName);
-    const nextIndex = imageUrlIndex + 1;
-    
-    if (nextIndex < imageUrls.length) {
-      setImageUrlIndex(nextIndex);
-    }
-    // If we've exhausted all URLs, stay on the last one (placeholder)
-  };
-
-  const getCurrentImageUrl = () => {
-    const imageUrls = getPlayerImageUrls(playerName);
-    return imageUrls[imageUrlIndex] || imageUrls[imageUrls.length - 1];
-  };
-
-  // Simple player name formatting for URLs
-  const formatNameForImage = (name) => {
-    return name.toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/\./g, '')
-      .replace(/'/g, '')
-      .replace(/jr/g, '')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, ''); // Remove leading/trailing dashes
-  };
-
-  // Create multiple image URL sources for better coverage
-  const getPlayerImageUrls = (name) => {
-    const formattedName = formatNameForImage(name);
-    
-    return [
-      // Try a more generic placeholder first
-      `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&size=200&background=667eea&color=ffffff&bold=true`,
-      
-      // NFL.com images (if available)
-      `https://static.www.nfl.com/image/private/t_headshot_desktop/f_auto/league/api/clubs/logos/${formattedName}`,
-      
-      // Generic placeholder with just initials
-      `https://via.placeholder.com/200x200/667eea/ffffff?text=${encodeURIComponent(name.split(' ').map(n => n[0]).join('').toUpperCase())}`
+  // Create a visually appealing player avatar
+  const getPlayerAvatar = (name) => {
+    const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+    const colors = [
+      { bg: '#1B2631', text: '#FFD700' }, // Navy & Gold
+      { bg: '#2C3E50', text: '#E8F4FD' }, // Slate & Light Blue
+      { bg: '#34495E', text: '#F1C40F' }, // Dark Gray & Yellow
+      { bg: '#273746', text: '#E74C3C' }, // Dark Blue & Red
+      { bg: '#1A252F', text: '#2ECC71' }, // Dark Navy & Green
+      { bg: '#17202A', text: '#E67E22' }, // Almost Black & Orange
     ];
+    
+    // Use name length to pick consistent color for each player
+    const colorIndex = name.length % colors.length;
+    const selectedColor = colors[colorIndex];
+    
+    return {
+      initials,
+      backgroundColor: selectedColor.bg,
+      textColor: selectedColor.text
+    };
   };
 
   // Format prop line text for display
@@ -155,6 +130,7 @@ const PlayerCard = ({ playerName, playerData }) => {
   };
 
   const propGroups = groupProps(playerData);
+  const avatar = getPlayerAvatar(playerName);
 
   return (
     <div className={`player-card ${isFlipped ? 'flipped' : ''}`} onClick={handleCardClick}>
@@ -162,12 +138,54 @@ const PlayerCard = ({ playerName, playerData }) => {
         {/* Front of the card */}
         <div className="card-front">
           <div className="player-image-container">
-            <img 
-              src={getCurrentImageUrl()}
-              alt={playerName}
-              className="player-image"
-              onError={handleImageError}
-            />
+            <div 
+              className="player-avatar"
+              style={{
+                backgroundColor: avatar.backgroundColor,
+                color: avatar.textColor,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '150px',
+                height: '150px',
+                borderRadius: '50%',
+                fontSize: '3rem',
+                fontWeight: 'bold',
+                border: '4px solid #FFD700',
+                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.3)',
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+            >
+              {/* Background pattern for visual interest */}
+              <div 
+                style={{
+                  position: 'absolute',
+                  top: '-20%',
+                  right: '-20%',
+                  width: '60%',
+                  height: '60%',
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  borderRadius: '50%',
+                  zIndex: 1
+                }}
+              />
+              <div 
+                style={{
+                  position: 'absolute',
+                  bottom: '-30%',
+                  left: '-30%',
+                  width: '80%',
+                  height: '80%',
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                  borderRadius: '50%',
+                  zIndex: 1
+                }}
+              />
+              <span style={{ position: 'relative', zIndex: 2 }}>
+                {avatar.initials}
+              </span>
+            </div>
           </div>
           <div className="player-name">
             {playerName.toUpperCase()}

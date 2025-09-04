@@ -107,6 +107,22 @@ const BetGrid = () => {
     );
   }
 
+  // Normalize player names for display (proper capitalization, suffixes, etc.)
+  const normalizePlayerNameForDisplay = (name) => {
+    return name
+      .split(' ')
+      .map(part => {
+        // Handle suffixes like Jr., Sr., III, etc.
+        if (['jr', 'sr', 'ii', 'iii', 'iv', 'v'].includes(part.toLowerCase().replace('.', ''))) {
+          return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+        }
+        // Capitalize first letter of each word
+        return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+      })
+      .join(' ')
+      .trim();
+  };
+
   // Sort players alphabetically by name
   const sortedPlayers = Object.entries(playerData).sort(([nameA], [nameB]) => 
     nameA.localeCompare(nameB)
@@ -124,7 +140,7 @@ const BetGrid = () => {
         {sortedPlayers.map(([playerName, props]) => (
           <PlayerCard 
             key={playerName}
-            playerName={playerName}
+            playerName={normalizePlayerNameForDisplay(playerName)}
             playerData={props}
           />
         ))}

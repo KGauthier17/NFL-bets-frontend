@@ -34,7 +34,7 @@ const BetGrid = () => {
       const healthResponse = await fetchWithTimeout(`${BASE_URL}/health`, {
         method: 'GET',
         headers,
-      }, 60000); // 60 second timeout for health check
+      }, 180000); // 2 minute timeout for health check to allow Render to boot up
       
       if (!healthResponse.ok) {
         console.warn('Health check failed, but continuing with main request');

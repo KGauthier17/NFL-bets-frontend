@@ -109,6 +109,11 @@ const PlayerCard = ({ playerName, playerData }) => {
     Object.entries(data).forEach(([key, value]) => {
       const lowerKey = key.toLowerCase();
       
+      // Skip props that end with "_no" as we don't want to display them
+      if (lowerKey.endsWith('_no')) {
+        return;
+      }
+      
       // Handle combined props first (before individual categories)
       if (lowerKey.includes('rush') && lowerKey.includes('reception')) {
         groups.combined.push({ key, value });

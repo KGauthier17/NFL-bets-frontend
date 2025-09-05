@@ -8,6 +8,7 @@ const BetGrid = () => {
   const [error, setError] = useState(null);
 
   const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  const API_KEY = process.env.REACT_APP_API_KEY;
 
   const fetchWithTimeout = (url, options = {}, timeout = 30000) => {
     return Promise.race([
@@ -21,11 +22,18 @@ const BetGrid = () => {
   const wakeUpBackend = useCallback(async () => {
     try {
       console.log('Waking up backend...');
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      
+      // Add API key if available
+      if (API_KEY) {
+        headers['X-API-Key'] = API_KEY;
+      }
+      
       const healthResponse = await fetchWithTimeout(`${BASE_URL}/health`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
       }, 60000); // 60 second timeout for health check
       
       if (!healthResponse.ok) {
@@ -36,22 +44,34 @@ const BetGrid = () => {
     } catch (error) {
       console.warn('Health check failed:', error.message, '- continuing with main request');
     }
-  }, [BASE_URL]); // Added BASE_URL to dependency array
+  }, [BASE_URL, API_KEY]); // Added BASE_URL and API_KEY to dependency array
 
   const fetchPlayerData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
       
+      // Check if API key is provided
+      if (!API_KEY) {
+        throw new Error('API key is required. Please check your environment configuration.');
+      }
+      
       // First, try to wake up the backend
       await wakeUpBackend();
       
       console.log('Fetching player predictions...');
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      
+      // Add API key if available
+      if (API_KEY) {
+        headers['X-API-Key'] = API_KEY;
+      }
+      
       const response = await fetchWithTimeout(`${BASE_URL}/predict`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
       }, 45000); // 45 second timeout for predict endpoint
       
       if (!response.ok) {
@@ -86,7 +106,7 @@ const BetGrid = () => {
     } finally {
       setLoading(false);
     }
-  }, [wakeUpBackend, BASE_URL]); // Added BASE_URL to dependency array
+  }, [wakeUpBackend, BASE_URL, API_KEY]); // Added BASE_URL and API_KEY to dependency array
 
   useEffect(() => {
     fetchPlayerData();

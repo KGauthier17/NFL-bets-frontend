@@ -33,59 +33,48 @@ const PlayerCard = ({ playerName, playerData }) => {
 
   // Format prop line text for display
   const formatPropLine = (key) => {
-    let formatted = key.replace(/_/g, ' ');
-    formatted = formatted.replace('player ', '');
+    // Remove 'player_' prefix
+    let formatted = key.replace(/^player_/, '');
     
     // Handle specific prop type formatting
     const propMappings = {
       // Touchdown props
-      'anytime td yes': 'Anytime TD',
-      'anytime td no': 'No TD',
-      'first td': 'First TD',
-      'last td': 'Last TD',
+      'anytime_td_yes': 'Anytime TD',
       
       // Receiving props
-      'reception longest': 'Longest Reception',
-      'reception yds': 'Receiving Yards',
-      'receiving yards': 'Receiving Yards',
+      'reception_longest': 'Longest Reception',
+      'reception_yds': 'Receiving Yards',
       'receptions': 'Receptions',
-      'receiving tds': 'Receiving TDs',
-      'targets': 'Targets',
+      'receiving_tds': 'Receiving TDs',
       
       // Passing props
-      'pass attempts': 'Pass Attempts',
-      'pass completions': 'Completions',
-      'completion percentage': 'Completion %',
-      'pass interceptions': 'Interceptions',
-      'pass tds': 'Passing TDs',
-      'pass yds': 'Passing Yards',
-      'passing yards': 'Passing Yards',
-      'passing tds': 'Passing TDs',
-      'sacks taken': 'Sacks',
-      'qb rating': 'QB Rating',
+      'pass_attempts': 'Pass Attempts',
+      'pass_completions': 'Completions',
+      'pass_tds': 'Passing TDs',
+      'pass_yds': 'Passing Yards',
       
       // Rushing props
-      'rush attempts': 'Rush Attempts',
-      'rush longest': 'Longest Rush',
-      'rush yds': 'Rushing Yards',
-      'rushing yards': 'Rushing Yards',
-      'rushing tds': 'Rushing TDs',
-      'carries': 'Carries',
+      'rush_attempts': 'Rush Attempts',
+      'rush_longest': 'Longest Rush',
+      'rush_yds': 'Rushing Yards',
+      'rushing_tds': 'Rushing TDs',
       
       // Combined props
-      'rush reception yd': 'Rush + Rec Yards',
-      'rush reception yds': 'Rush + Rec Yards'
+      'rush_reception_yds': 'Rush + Rec Yards'
     };
 
+    // Extract the base prop name (without over/under and value)
+    let baseProp = formatted.replace(/_over_[\d.]+$/, '').replace(/_under_[\d.]+$/, '');
+    
     // Find matching mapping
-    for (const [key_pattern, display] of Object.entries(propMappings)) {
-      if (formatted.includes(key_pattern)) {
-        return display;
-      }
+    const displayName = propMappings[baseProp];
+    if (displayName) {
+      return displayName;
     }
     
     // Default formatting if no mapping found
-    return formatted
+    return baseProp
+      .replace(/_/g, ' ')
       .split(' ')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
@@ -93,8 +82,18 @@ const PlayerCard = ({ playerName, playerData }) => {
 
   // Extract the line value from the prop key
   const extractLineValue = (key) => {
-    const match = key.match(/(\d+\.?\d*)/);
-    return match ? match[1] : '';
+    const overMatch = key.match(/_over_([\d.]+)$/);
+    const underMatch = key.match(/_under_([\d.]+)$/);
+    return overMatch ? overMatch[1] : underMatch ? underMatch[1] : '';
+  };
+
+  // Check if prop is over or under
+  const getPropDirection = (key) => {
+    if (key.includes('_over_')) return 'over';
+    if (key.includes('_under_')) return 'under';
+    if (key.includes('_yes')) return 'yes';
+    if (key.includes('_no')) return 'no';
+    return '';
   };
 
   // Group props by type for better organization
@@ -192,15 +191,16 @@ const PlayerCard = ({ playerName, playerData }) => {
                     const percentage = (value * 100).toFixed(1);
                     const lineValue = extractLineValue(key);
                     const propType = formatPropLine(key);
+                    const direction = getPropDirection(key);
                     
                     return (
                       <div key={key} className="prop-line">
                         <span className="prop-text">
                           {propType}
-                          {key.includes('over') && ` O${lineValue}`}
-                          {key.includes('under') && ` U${lineValue}`}
-                          {key.includes('yes') && ''}
-                          {key.includes('no') && ''}
+                          {direction === 'over' && ` O${lineValue}`}
+                          {direction === 'under' && ` U${lineValue}`}
+                          {direction === 'yes' && ''}
+                          {direction === 'no' && ''}
                         </span>
                         <span className="prop-probability">
                           {percentage}%
